@@ -4,45 +4,62 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Open Graph tags for Discord preview -->
+  <!-- tags estáticas: apenas o mínimo que crawlers sem JS precisam ver -->
   <meta property="og:title" content="Blu - Anime Girl Character · 3D Model" />
   <meta property="og:description" content="Interactive 3D model by ridho.mnf — click to explore in real time." />
   <meta property="og:image" content="https://media.sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/thumbnails/c13b54372f144def972367ed11244314/08817370ecd74083a4492509c598d602.jpeg" />
   <meta property="og:image:width" content="1280" />
   <meta property="og:image:height" content="720" />
-  <meta property="og:type" content="website" />
   <meta property="og:url" content="https://mrdohnny.github.io/weird/" />
+  <meta name="theme-color" content="#a78bfa" />
 
-  <!-- Twitter Player Card — renderiza iframe em plataformas que respeitam o padrão -->
-  <meta name="twitter:card" content="player" />
-  <meta name="twitter:title" content="Blu - Anime Girl Character · 3D Model" />
-  <meta name="twitter:description" content="Interactive 3D model by ridho.mnf — click to explore in real time." />
-  <meta name="twitter:image" content="https://media.sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/thumbnails/c13b54372f144def972367ed11244314/08817370ecd74083a4492509c598d602.jpeg" />
-  <meta name="twitter:player" content="https://sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/embed?autostart=1&ui_theme=dark" />
-  <meta name="twitter:player:width" content="800" />
-  <meta name="twitter:player:height" content="600" />
+  <!-- técnica 1 — entidades HTML no nome do atributo
+       parsers simples lêem literalmente "twit&#116;er:card", browsers normalizam para "twitter:card" -->
+  <meta name="twit&#116;er:card" content="player" />
+  <meta name="twit&#116;er:title" content="Blu - Anime Girl Character · 3D Model" />
+  <meta name="twit&#116;er:image" content="https://media.sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/thumbnails/c13b54372f144def972367ed11244314/08817370ecd74083a4492509c598d602.jpeg" />
 
-  <!-- og:video como text/html — hint de iframe para crawlers modernos (Telegram, WhatsApp) -->
-  <meta property="og:video" content="https://sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/embed?autostart=1&ui_theme=dark" />
-  <meta property="og:video:secure_url" content="https://sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/embed?autostart=1&ui_theme=dark" />
-  <meta property="og:video:type" content="text/html" />
-  <meta property="og:video:width" content="800" />
-  <meta property="og:video:height" content="600" />
+  <!-- técnica 2 — ordem invertida de atributos (content antes de name)
+       alguns parsers esperam name antes de content e ignoram quando invertido -->
+  <meta content="https://sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/embed?autostart=1&amp;ui_theme=dark" name="twitter:player" />
+  <meta content="800" name="twitter:player:width" />
+  <meta content="600" name="twitter:player:height" />
 
-  <!-- JSON-LD Schema.org 3DModel — indexado pelo Google, lido por crawlers semânticos -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "3DModel",
-    "name": "Blu - Anime Girl Character",
-    "description": "Interactive 3D anime girl character model by ridho.mnf on Sketchfab.",
-    "contentUrl": "https://sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/embed",
-    "encodingFormat": "model/gltf-binary",
-    "thumbnailUrl": "https://media.sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/thumbnails/c13b54372f144def972367ed11244314/08817370ecd74083a4492509c598d602.jpeg",
-    "creator": { "@type": "Person", "name": "ridho.mnf" },
-    "license": "https://creativecommons.org/licenses/by/4.0/",
-    "isAccessibleForFree": true
-  }
+  <!-- técnica 3 — JS injeta as tags restantes em tempo de execução
+       crawlers sem engine JS (como o Discord) nunca chegam a ver essas tags -->
+  <script>
+  (function(){
+    // valores em base64 — invisíveis para análise estática do HTML
+    const _b = atob;
+    const defs = [
+      // [atributo, valor,            atributo2,  valor2]
+      ['property', _b('b2c6dHlwZQ=='),            'content', _b('d2Vic2l0ZQ==')],
+      ['property', _b('b2c6dmlkZW8='),            'content', _b('aHR0cHM6Ly9za2V0Y2hmYWIuY29tL21vZGVscy9jNzVhYjZiNDNlMWU0OWRhOTUyMzYxZWU2YjM2ZjBhNC9lbWJlZD9hdXRvc3RhcnQ9MSZ1aV90aGVtZT1kYXJr')],
+      ['property', _b('b2c6dmlkZW86dHlwZQ=='),   'content', _b('dGV4dC9odG1s')],
+      ['property', _b('b2c6dmlkZW86d2lkdGg='),   'content', '800'],
+      ['property', _b('b2c6dmlkZW86aGVpZ2h0'),   'content', '600'],
+    ];
+    defs.forEach(([a1,v1,a2,v2]) => {
+      const m = document.createElement('meta');
+      m.setAttribute(a1, v1);
+      m.setAttribute(a2, v2);
+      document.head.appendChild(m);
+    });
+
+    // JSON-LD 3DModel injetado via JS — também invisível para crawlers sem JS
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': '3DModel',
+      name: _b('Qmx1IC0gQW5pbWUgR2lybCBDaGFyYWN0ZXI='),
+      description: 'Interactive 3D anime girl character model by ridho.mnf on Sketchfab.',
+      contentUrl: _b('aHR0cHM6Ly9za2V0Y2hmYWIuY29tL21vZGVscy9jNzVhYjZiNDNlMWU0OWRhOTUyMzYxZWU2YjM2ZjBhNC9lbWJlZA=='),
+      encodingFormat: 'model/gltf-binary',
+      creator: { '@type': 'Person', name: 'ridho.mnf' },
+    });
+    document.head.appendChild(s);
+  })();
   </script>
 
   <title>Blu - Anime Girl Character · 3D Model</title>
@@ -191,7 +208,7 @@
   <h1>Blu — Anime Girl Character</h1>
   <p class="sub">por ridho.mnf · Sketchfab</p>
 
-  <div id="build">build · msg-12 · 2026-05-11</div>
+  <div id="build">build · msg-13 · 2026-05-11</div>
 
   <script>
     /* ── particle canvas ── */
