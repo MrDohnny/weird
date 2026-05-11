@@ -13,14 +13,12 @@
   <meta property="og:url" content="https://mrdohnny.github.io/weird/" />
   <meta name="theme-color" content="#a78bfa" />
 
-  <!-- técnica 1 — entidades HTML no nome do atributo
-       parsers simples lêem literalmente "twit&#116;er:card", browsers normalizam para "twitter:card" -->
-  <meta name="twit&#116;er:card" content="player" />
-  <meta name="twit&#116;er:title" content="Blu - Anime Girl Character · 3D Model" />
-  <meta name="twit&#116;er:image" content="https://media.sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/thumbnails/c13b54372f144def972367ed11244314/08817370ecd74083a4492509c598d602.jpeg" />
+  <!-- técnica 1 — card seguro nas tags estáticas (summary_large_image passa no Discord) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Blu - Anime Girl Character · 3D Model" />
+  <meta name="twitter:image" content="https://media.sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/thumbnails/c13b54372f144def972367ed11244314/08817370ecd74083a4492509c598d602.jpeg" />
 
-  <!-- técnica 2 — ordem invertida de atributos (content antes de name)
-       alguns parsers esperam name antes de content e ignoram quando invertido -->
+  <!-- técnica 2 — ordem invertida (content antes de name) para twitter:player -->
   <meta content="https://sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/embed?autostart=1&amp;ui_theme=dark" name="twitter:player" />
   <meta content="800" name="twitter:player:width" />
   <meta content="600" name="twitter:player:height" />
@@ -208,7 +206,7 @@
   <h1>Blu — Anime Girl Character</h1>
   <p class="sub">por ridho.mnf · Sketchfab</p>
 
-  <div id="build">build · msg-13 · 2026-05-11</div>
+  <div id="build">build · msg-14 · 2026-05-11</div>
 
   <script>
     /* ── particle canvas ── */
