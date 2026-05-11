@@ -66,6 +66,21 @@
     }
     #viewer.ready { opacity: 1; }
 
+    /* portal tem cursor de pointer e hint visual */
+    portal#viewer {
+      cursor: pointer;
+    }
+    portal#viewer.ready::after {
+      content: '⤢ expandir';
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.08em;
+      pointer-events: none;
+    }
+
     #hud {
       position: absolute;
       inset: 0;
@@ -120,11 +135,19 @@
       <span class="label">Carregando modelo 3D…</span>
     </div>
 
-    <iframe
+    <!-- portal: embedding de nova geração, ativa com clique -->
+    <portal
       id="viewer"
+      src="https://sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/embed?autostart=1&ui_theme=dark&ui_infos=0&ui_watermark=0"
+    ></portal>
+
+    <!-- fallback iframe para navegadores sem suporte a portal -->
+    <iframe
+      id="viewer-fallback"
       src="https://sketchfab.com/models/c75ab6b43e1e49da952361ee6b36f0a4/embed?autostart=1&ui_theme=dark&ui_infos=0&ui_watermark=0"
       allow="autoplay; fullscreen; xr-spatial-tracking"
       allowfullscreen
+      style="display:none;position:absolute;inset:0;width:100%;height:100%;border:none;opacity:0;transition:opacity 0.8s ease;"
     ></iframe>
   </div>
 
@@ -196,16 +219,40 @@
     }
     requestAnimationFrame(draw);
 
-    /* hide HUD once iframe signals it is ready */
-    const viewer = document.getElementById('viewer');
-    const hud    = document.getElementById('hud');
+    const hud      = document.getElementById('hud');
+    const portal   = document.getElementById('viewer');
+    const fallback = document.getElementById('viewer-fallback');
 
-    viewer.addEventListener('load', () => {
-      setTimeout(() => {
-        viewer.classList.add('ready');
-        hud.classList.add('hidden');
-      }, 1200);
-    });
+    const portalSupported = typeof HTMLPortalElement !== 'undefined';
+
+    if (portalSupported) {
+      /* ── modo portal ── */
+      fallback.remove();
+
+      portal.addEventListener('load', () => {
+        setTimeout(() => {
+          portal.classList.add('ready');
+          hud.classList.add('hidden');
+        }, 1200);
+      });
+
+      /* clique ativa a transição para a página embutida */
+      portal.addEventListener('click', () => {
+        portal.activate().catch(() => {});
+      });
+
+    } else {
+      /* ── fallback iframe ── */
+      portal.remove();
+      fallback.style.display = 'block';
+
+      fallback.addEventListener('load', () => {
+        setTimeout(() => {
+          fallback.style.opacity = '1';
+          hud.classList.add('hidden');
+        }, 1200);
+      });
+    }
   </script>
 </body>
 </html>
